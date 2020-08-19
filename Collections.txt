@@ -1,0 +1,84 @@
+root of collection hierarchy is a trait Iterable[A]
+
+Iterable[A] has the method
+def iterator:Iterator[A]
+
+all the collections that implements Iterable shud give this method which return the
+elements one by one
+all other methods can be implemented in terms of this method
+
+
+
+** HashSet is not ordered. as it stores according to the hash of keys
+so the first/last elements of HashSet can be different in all runs
+Ordered alternative for HashSet is LinkedHashSet
+
+
+iterable has methods grouped and sliding
+val xs = List(1, 2, 3, 4, 5)
+List[Int] = List(1, 2, 3, 4, 5)
+val git = xs grouped 3
+Iterator[List[Int]] = non-empty iterator
+git.next()
+List[Int] = List(1, 2, 3)
+git.next()
+List[Int] = List(4, 5)
+val sit = xs sliding 3
+Iterator[List[Int]] = non-empty iterator
+sit.next()
+List[Int] = List(1, 2, 3)
+sit.next()
+List[Int] = List(2, 3, 4)
+sit.next()
+List[Int] = List(3, 4, 5)
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+Iterable has three implementation hierarchy Seq, Set, Map
+
+seq and map implements its apply method with PartialFunction
+as seq have indexes and Map have availability of key
+
+set have membership test so it doesnt implement apply from PartialFunction
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Sequences
+
+
+LinearSeq =>  List, Stack, Stream, Queue
+efficient for head and tail operations
+
+IndexedSeq => Vector, NumericRange, String, Range
+efficient for apply and length operations
+
+
+Sets
+SortedSet =>
+BitSet =>
+TreeSet =>
+TreeSet is implemented using red-black tree algorithm
+it is balanced tree having time complexity of O(log n ) for all operations except length
+
+
+Concrete immutable classes
+
+List =>
+List is finite immutable sequence
+constant time access to head and tail
+Linear time to access the element at index according to List length
+algorithm using it should take care that only access head or tail for better performance
+best for LIFO type algo
+
+ArraySeq =>
+constant time access for head tail or even at index x
+algorithm should not worry about the access
+but adding or updating one element needs linear time
+because array seq creates one private array and stores values inside that
+adding one element creates new array and copies existing elemnet in that
+hence it requires linear time
+
+Vector
+Vectors have constant time in all its operations
+The constant time high than accessing head of List or indexed access in ArraySeq, but its constant nonetheless

@@ -1,0 +1,7 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mMyEitherTest:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mMyEither test[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return left type if created type was left[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return left as result if called map on left[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return right with result if called map on right[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return left as result if called flatMap on left[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return right with result if called flatMap on right[0m[0m

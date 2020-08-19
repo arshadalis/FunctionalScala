@@ -1,0 +1,82 @@
+Semigroup
+Semigroup for type A is an operation that obeys the law of associativity
+i.e. (a + b) + c = a + (b + c)
+
+trait Semigroup[A]{
+    def combine(a1 : A,a2 : A) : A
+}
+
+
+Monoid for type A is the type which is semigroup with empty value
+
+that means monoid is
+i.  an operation which obeys associativity
+ii. and empty element of type A
+
+trait Monoid[A] extends Semigroup[A] {
+    def empty: A
+}
+
+Monoid in cats are defined in cats.kernel.Monoid aliased as cats.Monoid
+Semigroup in cats are defined in cats.kernel.Semigroup aliased as cats.Semigroup
+
+
+
+Functors
+functors are abstractions that allows for sequence of operations within a context
+informally, functor is anything with map method and laws
+
+functors
+List => there may be zero or more values
+Option => value may or may not be present
+Either => there may be value or error present
+
+Contravariant functors
+the one with contramap method
+lets say we have a functor
+trait Functor[F[A]]{
+    def map[A](f:A=>B):F[B]
+}
+
+then contravariant functor is something which have a contramap like below
+
+trait Functor[F[A]]{
+    def map[A](f:A=>B):F[B]
+    def contramap(value:B)(function: B => A):F[B] = map(function(value)
+}
+
+
+Monads
+Monads are the means of sequencing computations
+informally anything that has constructor and flatMap is monad
+flatMap handles intermediate complexity as well.
+
+Monad type class is
+
+trait Monad[F[_]] {
+    def pure[A](a:A):F[A]
+    def flatMap[A,B](context:F[A])(func:A=>F[B]):F[B]
+}
+
+
+Either type class in cats
+lots of helpful methods like
+leftMap => it will map on left of either
+bimap takes two function what to do in case of both left and right and gives the result back
+
+
+Futures
+Futures are not referentially transparent
+Futures evaluates immediately and caches the result, this may produce uneven results if side effects are
+wrapped in futures like random no generator
+
+
+*****************
+
+Semigroupal (Apply Functor) product / zip
+
+For Some types like future, Lists , Either , Option which are Monad , product is implemented in terms of flatMap
+hence product for these types gives same result as sequencing
+
+Cats provides a type Validated
+which has instance of semigroupal but no instance of Monad
