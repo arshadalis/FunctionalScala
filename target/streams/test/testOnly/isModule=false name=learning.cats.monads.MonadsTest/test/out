@@ -1,5 +1,0 @@
-[0m[[0m[0minfo[0m] [0m[0m[32mMonadsTest:[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mMonadTest[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should create tabut of Person using pure[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should map tabut of person[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should flatMap tabut of person[0m[0m

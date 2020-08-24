@@ -1,10 +1,10 @@
 value is something that takes memory in computer. concrete data
-things that cant be value is like keywords, package names i.e not concrete data or that cant take memory.
+things that can not be value is like keywords, package names i.e not concrete data or that cant take memory.
 value is something that is right side of val
 
 () is unit.
 Set of unit type contains single value that is ().
-Nothing is special type which doesn't have any value
+Nothing is special data type which doesn't have any value
 
 Set of Nothing is simply empty Set
 
@@ -24,7 +24,7 @@ scala code or any statically typed check language code runs through a phase call
 
 
 Algebraic Data Types:****
-Types can be composed together to make more general types. Thsese are Algebraic data types.
+Types can be composed together to make more general types. These are Algebraic data types.
 ADTs can be composed in two  ways
 1. Sum Types
 2. Product Types
@@ -34,16 +34,14 @@ case class SomeT(int,string,boolean)
 
 scala 3 has support for sum types
 
-
-sum type
+Sum type
 OR type
 lets say if we try to map the possible values that the type can have, we can form an single dimensional axis of those values
 where that type can be something or something or something
 
 example int
-
- 1   2   3   4   5   6   7
-=+===+===+===+===+===+===+
+  1   2   3   4   5   6   7
+ =+===+===+===+===+===+===+
 
 example Boolean
 
@@ -93,10 +91,12 @@ function is mapping between domain and co-domain of the type of that functions
 Function should obey following props
 1. Totality => Given a:A , then f(a) will be result always in b:B.
 2. Determinism => if a===b then f(a) === f(b).
-3. No Side effects => only result of computing f(a) shud be result value b always.
+3. No Side effects => only result of computing f(a) should be result value b always.
 
-why do we need totality(referential transperancy)
+why do we need totality(referential transparency)
 to ignore defensive programming(try catch kind)
+
+note:opposite of total function is partial function
 
 Polymorphism in functional programming
 function operating with multiple data types.
@@ -113,7 +113,7 @@ type driven design of code is best
 Functional programming scala rules
 1. Only math functions
 2. No default methods (i.e. java.lang.Object equals,hashcode, toString etc)
-coz they doesnt make sense in functional prog, like equals allows to comapre Int with String
+coz they doesnt make sense in functional programming, like equals allows to compare Int with String
 3. No type reflection.
 No getClass, instanceOf etc.
 4. No nulls
@@ -121,7 +121,9 @@ No getClass, instanceOf etc.
 
 
 anything written as def is method not function
-scala is written to run on JVM, and in jvm  everythinng is object, object have methods.
+def cannot be use as values, like function does. we can not send def as values.
+(actually we can do that since scala internally does that via ETA expansion)
+scala is written to run on JVM, and in jvm everything is object, object have methods.
 
 but scala has functions i.e. (a:A) => A (internally it is object with method apply)
 
@@ -133,7 +135,6 @@ functions are monomorphic
 Polymorphism benefits
 
 1. Code reuse
-
 
 one disadvantage of polymorphism is, you get limited implementation choices
 

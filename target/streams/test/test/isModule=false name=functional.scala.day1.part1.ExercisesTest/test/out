@@ -1,9 +1,0 @@
-[0m[[0m[0minfo[0m] [0m[0m[32mExercisesTest:[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mSum and Product Types[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should Prove that A * 1 is equivalent to A [0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- Prove that A * 0 is equivalent to 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mSized of any container with type F[_][0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should return size of List[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should return size of Map[K,V][0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mPartial Application[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should return the size of Map created with any Key type[0m[0m
