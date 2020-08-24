@@ -1,0 +1,334 @@
+value is something that takes memory in computer. concrete data
+things that can not be value is like keywords, package names i.e not concrete data or that cant take memory.
+value is something that is right side of val
+
+() is unit.
+Set of unit type contains single value that is ().
+Nothing is special data type which doesn't have any value
+
+Set of Nothing is simply empty Set
+
+composition is fundamental thing in functional programming
+
+composing data types is using product and sum types
+
+
+Types****
+Type is a restriction on a value or expression to what kind of value it will result in.
+
+Types are simply set of values for that domain.
+Example Int.
+
+type exists only at compile time.
+scala code or any statically typed check language code runs through a phase called type checking.
+
+
+Algebraic Data Types:****
+Types can be composed together to make more general types. These are Algebraic data types.
+ADTs can be composed in two  ways
+1. Sum Types
+2. Product Types
+two ways we can represent product types in scala
+tuple (int,string,boolean)
+case class SomeT(int,string,boolean)
+
+scala 3 has support for sum types
+
+Sum type
+OR type
+lets say if we try to map the possible values that the type can have, we can form an single dimensional axis of those values
+where that type can be something or something or something
+
+example int
+  1   2   3   4   5   6   7
+ =+===+===+===+===+===+===+
+
+example Boolean
+
+   True  False
+====+=====+=====
+
+
+Product type
+AND type
+if the type is composed of multiple other types and that can be read as something and something...
+if we try to map that type we will have to create n dimensional axis denoting all the possible values that type can have
+its a product of all the possible values of all the elements of that type.
+lets take an example of product type TwoCharString
+case class TwoCharString(ch1:Char,ch2:Char)
+for this example we have two elements ch1 and ch2
+
+	 etc
+      |
+      E
+      |
+      D
+  ch1 |
+      C
+      |
+      B   (B,A)
+      |
+      A
+      |____A___B___C___D___E___etc
+
+                  ch2
+
+Above graph shows point (B,A) on axis
+
+
+sealed trait is used to define sum type mostly.
+sealed is fixed. and as we know sum type are fixed set of values, sealed types are sum types.
+
+
+Smart constructor
+invalid data cant flow in system
+core business logic doesnt need to perform validations
+
+
+*** Functions
+function is mapping between domain and co-domain of the type of that functions
+
+Function should obey following props
+1. Totality => Given a:A , then f(a) will be result always in b:B.
+2. Determinism => if a===b then f(a) === f(b).
+3. No Side effects => only result of computing f(a) should be result value b always.
+
+why do we need totality(referential transparency)
+to ignore defensive programming(try catch kind)
+
+note:opposite of total function is partial function
+
+Polymorphism in functional programming
+function operating with multiple data types.
+use of polymorphism
+1. code reuse
+2. function with types => we put more information in types and recruit compiler to work on type checking.
+it makes more readable, reasonable code. and also robust code.
+
+
+type driven design of code is best
++java also  has functional polymorphism using generics
+
+
+Functional programming scala rules
+1. Only math functions
+2. No default methods (i.e. java.lang.Object equals,hashcode, toString etc)
+coz they doesnt make sense in functional programming, like equals allows to compare Int with String
+3. No type reflection.
+No getClass, instanceOf etc.
+4. No nulls
+5. No exceptions
+
+
+anything written as def is method not function
+def cannot be use as values, like function does. we can not send def as values.
+(actually we can do that since scala internally does that via ETA expansion)
+scala is written to run on JVM, and in jvm everything is object, object have methods.
+
+but scala has functions i.e. (a:A) => A (internally it is object with method apply)
+
+functions that take or return function are higher order function
+function that takes a function and return similar function are combinators
+
+functions are monomorphic
+
+Polymorphism benefits
+
+1. Code reuse
+
+one disadvantage of polymorphism is, you get limited implementation choices
+
+def s(i:Int):Int =  here we have all the implementations available for Int
+
+def s[A](i:A):A = ??? what could be the implementation because we dont what A is
+
+
+Data Constructors
+val p : Person = Person("arsh",27)
+
+person class have data constructor, which given the needed parameters return the data created
+
+Type Constructors
+
+val list : List = ...
+// error : List takes type parameters
+above code wont compile
+
+val list : List[Int] = ...
+type constructor
+
+
+
+
+**** type level functions
+List, Option, Either, Future all are type level functions
+they take a value and return a type
+A => SomeType[A]
+
+** type constructors and type level functions are same
+
+
+
+*** Higher kinded
+we have type constructors like List Option
+that gives us type.
+example if u create list of Int it actually returns u List[Int]
+
+Kinds are type of types
+List[T]
+Option[T]
+Map[K,V]
+
+
+*** type classes
+in functional code bases, trait is used only for type classes
+so if we see trait in functional code base, it is for type class for sure
+
+type class is combination of 3 things
+1. Type class or Type Constructor
+2. Implementation for those types (type class instance)
+3. set of laws (laws are the way of documentation in functional programming, actually only way)
+4. some interface to use type class for those types
+
+where to put type class instance
+in companion object of type class because compiler looks for the instance of type class first in
+type class companion object
+or in companion object of our data type, because compiler also looks in that location
+hence we dont need to import implicits
+
+type classes is a way to add some functionality in our data types
+like add sort functionality in person class
+there is a way in oops as well to do this
+we have to use inheritance to do this, which is a drawback
+
+
+*********** Abstractions ****************
+Semigroup is an abstraction i.e. type class which cab be appended with same type
+
+Semigroup[A]{
+    def append(l:A,r:A):A
+}
+
+Monoid[A]
+
+Monoid is semigroup which has zero defined
+and obeys some laws i.e.
+leftIdentity = append(A,zero) should equal A
+rightIdentity = append(zero,A) should equal A
+
+******* Laws
+
+Laws make sure that we transform our programs/data types in such a way that the structure of the
+data type is preserved
+
+
+
+************. Functor is something for which, map is "lawfully" defined
+Functor is an abstraction which can be mapped => F[A] can be mapped to F[B] such that mapping obeys below laws
+
+trait Functor[F[_]] {
+    def map[A,B](fa:F[A])(func:A => B) : F[B]
+}
+
+Laws
+1.Identity Law => If identity function is passed to map, its output should be equal to input
+2. Composition Law => mapping of composed function should equal to mapping of each function
+F[_].map(f andThen g) == F[_].map(f).map(g)
+
+something more about the laws
+functor laws breaks if the structure of the functor is altered in any way
+example
+Options => we can convert some into none
+Future => convert success into failure
+List =>  truncate the list
+all above things breaks the functor laws
+
+
+
+Apply Functor
+an abstraction that takes two functors and combine them such that they return results of both
+trait Apply[F[_]]  extends Functor[F]{
+    def zip[A,B](f:F[A],g:F[B]) : F[(A,B)]
+}
+
+Applicative
+applicative is an abstraction which is apply functor with point function
+point function is return in program
+trait Applicative[F[_]] extends Apply[F]{
+    def point[A](f : => A) :F[A]
+}
+
+Monads
+Monads are abstraction which are applicatives with new method
+
+trait Monad[F[_]] extends Applicative[F]{
+    def bind[A,B](fa:F[A])(func: A => F[B]) : F[B] // flatMap
+}
+
+Monad has below functions from
+map from Functor
+zip from Apply Functor
+point from Applicative
+
+monads are the way to write procedural code in functional programming
+dependent programming
+monads are for sequencing computation and composition in functional programming
+for - comprehension are syntactic sugar for sequencing computations
+
+Optics
+optics are the way to deal with deeply nested data structures
+Lenses => product types
+Prism => sum types
+
+Case class Lense[S,A](
+                get : S => A,
+                set : A => S => S
+                )
+case class Prism[S,A](
+                get : S => Option[A],
+                set : A => S
+                )
+
+lenses and prism can be composed with each other
+say,
+we have types like Outer(inner:Inner) and Inner(a:A)
+we can compose lense of outer and inner and use composed lense to deal with it
+same with prisms
+
+if we compose Lense and Prism we get => Optional
+
+
+********************* Effects ******************
+
+exception handling is strictly prohibited in functional programming
+since it breaks pure function laws
+=> totality, determinism , no side effects
+
+exceptions are not values
+exceptions are termination point of program
+if the function returns value, we can do so many things with code like
+composition, sending these values to different functions etc
+
+State monads
+managing sequential state in functional programming
+mainly state monad is a function
+S => (S,A)
+
+we can write the state transitions in for comprehensions, which is still a program, which when called run on it, will take
+an state and will return the output state.
+
+StateT is something
+case class StateT[F[_],S,A] (run : S => F[S,A])
+so that state S is now wrapped in effect F
+
+this has multiple benefits like stack safety of our program now depends upon F
+also we can leverage the behaviour of F in comprehension
+
+IndexedState is something which has
+I => (O,A)
+
+so case class IndexedState[I,O,A](run: I => (O,A))
+
+
+ETA expension
+

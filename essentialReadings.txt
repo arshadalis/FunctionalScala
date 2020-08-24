@@ -1,0 +1,104 @@
+1) expressions, types and values
+expressions => are the text we write in programs. anything that we write is expression. example 1+2, "hello" etc.
+expressions evaluates to values. 1+2 evaluates to 3. and expressions have types.
+values => are data actually stored in the memory of the computer. values do not have types. all values are objects.
+types => type is restriction on expression to what kind of value it can evaluate to. type is there at compile time.
+
+2) Interacting with objects
+Object is an grouping of data and operations on that data.
+example 2 is an object and +,- are operations. operation are called as methods and data is called field.
+method call is an expression. "hello".toUpperCase and an expression evaluates to an object/value.
+so we can chain method calls exa. "hello".toUpperCase.toLowerCase
+
+3) Object literals
+creating our own objects. Declaration is one of the components of building scala program.
+Declaration doesn't evaluates to value, it is name given to value.
+generally val is to define fields and def for defining methods. diff between val and def is val is evaluated only first time(class loading) and only once.
+on the other hand def is evaluated every time it is called.
+scala does lazy loading i.e. something is not evaluated until it is needed.
+
+4)Classes
+classes are abstractions over objects i.e. classes are template for creating objects.
+classes constructors have parameters. if declared using val keyword can be accesses outside of the class also. otherwise accessible within
+the class body only.
+scala class constructor provides keyword parameter and default parameter.
+
+Scala type hierarchy
+Any is the grand supertype with AnyVal and AnyRef as subtypes. all value types belong to AnyVal like Int,Boolean,Float,Double etc.
+reference types belongs to AnyRef like String. most of the type are just aliases like int -> Int etc. AnyRef is equivalent of java.lang.object.
+Null and Nothing are the special types which are subtypes of all the types.
+
+Objects as functions
+apply method - functional application syntax
+Companion objects
+
+Case Classes
+whenever write case class scala generates class and companion object with some useful defaults
+1. constructor arguments are by default val
+2. toString method
+3. equals and hashcode method
+4. copy method
+
+Case Objects
+if have case class without constructor param, create case object instead.
+Scala creates class and companion object as instance of that class(only instance).
+it gets all the default methods case class
+
+Modeling Data with Traits
+The description of data -> algebraic data type
+it is good practice to define fields as def instead of vals in traits. becoz def is more general version of val.
+hence implementing classes that is subtypes can then implement them as val or def as appropriate.
+
+sealed traits -> all subtypes should be in same file.
+still subtypes of sealed traits can be extended outside of the file they are declared. if we dont want this declare them as sealed.
+if the subtypes shouldnt be extended at all declare them final.
+we can see a pattern of defining types here. declaring traits/classes as sealed/final can be handy. should consider these things
+while writing types.
+
+types are use for modeling data. but types can also be used to put artificial restrictions in program to make sure we dont make
+mistakes in program
+
+understanding the functional programming data types sum and product.
+product type => has a relationship . Cat has color
+sum type => is a relationship . Boolean is a true or false. use sealed trait final case class pattern
+the above two types are algebraic data types. description of data
+****** type class.... can be used for "is-a and" relationship. is-a and relationship is A is B and C i.e. inverse of sum type *******
+
+
+Structural Recursion
+pattern for using algebraic data types.
+if we have a type A which has B and C, to construct A we must have B and C. Structural recursion is breaking data into more granular
+level(breaking in smaller pieces), which can be then combined to get the desired type.
+pattern for using algebraic data types -> structural recursion. two variants of the pattern are polymorphism and pattern matching
+polymorphism -> typical OOP style
+we have defination in trait and extending classes overrides the behaviour, the implementation of concrete class will be executed.
+if the type is product type and the type is A which consist of B and C, and want to return F then write simply
+
+case class ADT(b:B,c:C){
+    def f: F = /// use b and c to construct F
+}
+if the type is Sum type
+sealed trait A { def f : F}
+case class B extends A { def f: F /// specific implementaion }
+case class C extends A { def f: F /// specific implementaion }
+three patterns of structural recursion
+1 polymorphism
+2 pattern matching in based trait
+3 pattern matching outside base trait
+in first two approaches  we can have only one implementation of the defination. Plus everything that defination requires should be present
+in class or sent as parameters.
+but in last approach we can have multiple implementation in object.
+
+adding new data is easy in OOP with extending to trait. but adding new method needs to change existing code.
+adding new method is easy in Functional but adding new data needs to change existing code.
+
+choosing the pattern depends upon whether the method depends upon external data and does have multiple implementation.
+if doesnt then we can have method implementation inside trait itself ex traffic signal. otherwise we can have outside trait so
+we can have multiple implementation and external data also.
+
+Recursive Data
+we must have base case and recursive case when working with recursive data like IntList.
+## read about how scala compiler knows about @tailrec
+## why tail recursion.. what is stack allocation heap allocation
+
+

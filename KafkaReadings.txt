@@ -1,0 +1,100 @@
+Kafka is distributed commit log
+
+it is a cluster of kafka brokers
+Broker is simply a node in a cluster, on which kafka is installed.
+
+There is always one kafka controller node.
+Controller is elected by zookeeper at the initial or when the current controller fails.
+Controller is responsible to elect partition leaders.
+If any of the broker goes down, controller elects the new leaders of the partitions.
+
+Kafka topics are the stream of the commit logs.
+it is the named queue of the messages.
+each topic is divided into partitions.
+
+Controller is responsible for managing the state of kafka cluster.
+state of kafka is state of partitions and the state of replicas.
+
+a partition have no of replicas
+data is never read from replica. replica are only for failover.
+
+
+when we create topic with lets say 3 partitions
+
+it creates 3 folders in broker
+lets say we have only one broker, so we have 3 folders created in kafka log directory
+the configuration of the directory is in server.properties log.dir=/tmp/kafka-logs
+
+each folder has 4 files
+-rw-r--r--  1 aso2869  wheel    10M Mar 28 18:15 00000000000000000000.index
+-rw-r--r--  1 aso2869  wheel   171B Mar 28 18:26 00000000000000000000.log
+-rw-r--r--  1 aso2869  wheel    10M Mar 28 18:15 00000000000000000000.timeindex
+-rw-r--r--  1 aso2869  wheel     8B Mar 28 18:15 leader-epoch-checkpoint
+
+.log file contains the actual messages sent to topic by producer
+kafka picks the partition arbitrarily, and then push the messages on diff partitions in Round-Robin method.
+
+each message has offset and actual message
+each offset has multiple information like offset no, time created, size of message etc.
+
+each partition is bound to broker
+so if we have 3 brokers, partition 0 will be on given any one of the broker only. if we have replication factor 1 which is default.
+
+each partition is divided into segments
+
+there is always one active segment where the producer writes data to.
+
+segment name is actually the starting offset of that file. we can tweak the kafka configuration to change the size of each segment or
+may be the number of messages each segment can have.
+
+so lets say we tweak it to 3 messages. then when segment 000000.log has reached 3 messages ,
+kafka will create new segment with name 000003.log and make it active
+
+-rw-r--r--  1 aso2869  wheel    10M Mar 28 18:15 00000000000000000000.index
+-rw-r--r--  1 aso2869  wheel   171B Mar 28 18:26 00000000000000000000.log
+-rw-r--r--  1 aso2869  wheel    10M Mar 28 18:15 00000000000000000000.timeindex
+-rw-r--r--  1 aso2869  wheel    10M Mar 28 18:15 00000000000000000003.index
+-rw-r--r--  1 aso2869  wheel   171B Mar 28 18:26 00000000000000000003.log
+-rw-r--r--  1 aso2869  wheel    10M Mar 28 18:15 00000000000000000003.timeindex
+
+index files stores the offset and position of that offset in log file.
+log file can grow to huge sizes like 1G is default. so searching for particular offset in log file and
+then reading that from logfile will be expensive.
+if we want to read message at offset 70 lets say, the we can search the position of offset 70 from index file,
+then directly go to that position in log file and read the message.
+
+order of message consumption is guaranteed at partition level, not topic level.
+
+each partition is associated to broker. if we have replicated partitions, one of the broker is leader and others are followers.
+leader always written with new data and read from. followers act as backup. they sync the data from leader periodically.
+once the leader is down one of the follower is chosen to be leader.
+(how is the election process works ?)
+
+how does consumer commit an offset
+it produces a message on __consumer_offsets topic for committed offset for each partition
+if any consumer goes down or new consumer joins the group , it triggers rebalance.
+each consumer is then assigned new partition. then consumer picks work from reading latest committed offset
+and start reading from there
+if the last committed offset is smaller than the one which is being processed and rebalancing happens,
+these records are processed twice
+
+client application has big impact on committing offset
+kafka has various ways of committing offset
+
+Autocommit
+every 5 seconds consumer will commit the largest offset it receive in the last poll
+
+Commit current offset
+use commitSync method consumer API. commitSync also retries to commit.
+
+CommitAsync would not retry.
+
+consumer api allows to commit specific offset in partitions.
+Map of partition->offset
+
+there can be some work should be done before the rebalancing happens
+we can register, ConsumerRebalanceListener which can be used to do things before the ownership of partition is revoked from consumer
+
+we can seek to particular offset, using seek method
+
+
